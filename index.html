@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<style>
+    
+    .input{
+        width: 10%;
+        height: 100px;
+        background-color: rgb(228, 18, 18);
+        border-style: solid;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: xx-large;
+        
+        
+    }
+    #row_one{
+        display: flex;
+        
+    }
+    
+    #row_two{
+        display: flex;
+    }
+    #row_three{
+        display: flex;
+    }
+    #winners{
+        font-size: larger;
+        padding: 20px;
+    }
+    #restart{
+        width: 10%;
+        height: 30px;
+    }
+</style>
+<body>
+    <div class="container">
+        <div id="row_one">
+           <div data-index="0" class="input" id="input_1"></div>
+           <div data-index="1" class="input" id="input_2"></div>
+           <div data-index="2" class="input" id="input_3"></div>
+        </div>
+        <div id="row_two">
+            <div data-index="3" class="input" id="input_4"></div>
+            <div data-index="4" class="input" id="input_5"></div>
+            <div data-index="5" class="input" id="input_6"></div>
+        </div>
+        <div id="row_three">
+            <div data-index="6" class="input" id="input_7"></div>
+            <div data-index="7" class="input" id="input_8"></div>
+            <div data-index="8" class="input" id="input_9"></div>
+        </div>
+    </div>
+               
+   <div id="winners"></div>
+   
+    <button id="restart">Restart</button>
+
+<script>
+
+
+
+var a = document.querySelectorAll(".input");
+var winers = document.getElementById("winners");
+var restart = document.getElementById("restart");   
+        let currentPlayer = "X";
+        var start = true;
+        var winningCombos = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        a.forEach(x => x.addEventListener('click', function () {
+            if (start && x.textContent.trim() === "") {
+                x.textContent = currentPlayer;
+
+                if (currentPlayer == "X") {
+                    x.style.backgroundColor = "green";
+                } else {
+                    x.style.backgroundColor = "red";
+                }
+
+                if (winners()) {
+                    document.getElementById("winners").textContent = `${currentPlayer} wins!`;
+                    start = false;
+                } else if ([...a].every(input => input.textContent.trim() !== '')) {
+                    document.getElementById("winners").textContent = 'Its a tie!';
+                    start = false;
+                } else {
+                    currentPlayer = currentPlayer == "X" ? "O" : "X";
+                }
+            }
+        }));
+
+        function winners() {
+            for (let combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (
+                    a !== undefined &&
+                    document.querySelectorAll('.input')[a].textContent.trim() !== '' &&
+                    document.querySelectorAll('.input')[a].textContent === document.querySelectorAll('.input')[b].textContent &&
+                    document.querySelectorAll('.input')[a].textContent === document.querySelectorAll('.input')[c].textContent
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        restart.addEventListener('click', function () {
+            a.forEach(x => {
+                x.textContent = "";
+                winers.textContent = "";
+                x.style.backgroundColor = "red";
+            });
+            
+            start = true;
+            currentPlayer = "X";
+        });
+
+</script>
+
+</body>
+</html>
